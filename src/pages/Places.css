@@ -1,0 +1,68 @@
+/* ===== Page header ===== */
+.places-head {
+  background:
+    radial-gradient(circle at 12% 20%, rgba(59, 109, 17, 0.1), transparent 45%),
+    var(--cream);
+  padding: 64px 0 48px;
+  border-bottom: 1px solid var(--border);
+}
+.places-head h1 {
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  margin: 14px 0 16px;
+}
+.places-head p {
+  max-width: 620px;
+  color: var(--charcoal-soft);
+  font-size: 1.08rem;
+}
+
+/* ===== Body ===== */
+.places-body { padding-top: 40px; }
+
+/* filter chips */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+.chip {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--charcoal-soft);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.chip:hover { border-color: var(--charcoal); color: var(--charcoal); }
+.chip.is-active {
+  background: var(--honey);
+  border-color: var(--honey);
+  color: var(--charcoal);
+  font-weight: 700;
+}
+
+/* grid */
+.places-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.places-empty {
+  text-align: center;
+  color: var(--charcoal-soft);
+  padding: 40px 0;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .places-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .places-grid { grid-template-columns: 1fr; }
+}
