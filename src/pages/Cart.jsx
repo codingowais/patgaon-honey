@@ -3,45 +3,72 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 import { supabase } from '../lib/supabase.js'
+import { sendOrderEmails } from '../lib/notify.js'
 import './Cart.css'
 
 export default function Cart() {
   const { items, total, updateQty, removeItem, clear } = useCart()
-  const { isAuthed, user } = useAuth()
+  const { isAuthed, user, displayName } = useAuth()
   const navigate = useNavigate()
 
+  const [phone, setPhone] = useState('')
+  const [address, setAddress] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
-  const [orderId, setOrderId] = useState(null)
+  const [order, setOrder] = useState(null)
 
-  const handleCheckout = async () => {
+  const handleCheckout = async (e) => {
+    e.preventDefault()
     setError('')
+    if (!phone.trim() || !address.trim()) {
+      setError('Please enter your phone number and delivery address.')
+      return
+    }
     setBusy(true)
     const { data, error } = await supabase
       .from('orders')
-      .insert({ user_id: user.id, items, total })
+      .insert({
+        user_id: user.id,
+        items,
+        total,
+        customer_email: user.email,
+        phone: phone.trim(),
+        address: address.trim(),
+      })
       .select()
       .single()
-    setBusy(false)
 
     if (error) {
+      setBusy(false)
       setError(error.message)
       return
     }
-    setOrderId(data.id)
+
+    // Emails are sent after the order is saved. A failed email won't cancel the order.
+    await sendOrderEmails({
+      order: data,
+      customerName: displayName,
+      customerEmail: user.email,
+      phone: phone.trim(),
+      address: address.trim(),
+    })
+
+    setBusy(false)
+    setOrder(data)
     clear()
   }
 
-  // ===== Success screen =====
-  if (orderId) {
+  // ===== Confirmation screen =====
+  if (order) {
     return (
       <div className="cart-page">
         <div className="shell">
           <div className="order-success">
             <span className="success-mark" aria-hidden="true">✓</span>
-            <h1>Order placed!</h1>
+            <h1>Order confirmed</h1>
             <p>Thank you for supporting the Honey Village. 🍯</p>
-            <p className="order-ref">Order ID: <strong>{orderId.slice(0, 8)}</strong></p>
+            <p>A confirmation has been sent to <strong>{user.email}</strong>.</p>
+            <p className="order-ref">Order ID: <strong>{order.id.slice(0, 8).toUpperCase()}</strong></p>
             <div className="order-success-actions">
               <Link to="/shop" className="btn btn-primary">Continue shopping</Link>
               <Link to="/" className="btn btn-ghost">Back to home</Link>
@@ -70,7 +97,6 @@ export default function Cart() {
           </div>
         ) : (
           <div className="cart-layout">
-            {/* Items */}
             <div className="cart-items">
               {items.map((i) => (
                 <div className="cart-row" key={i.id}>
@@ -91,7 +117,6 @@ export default function Cart() {
               <button className="cart-clear-all" onClick={clear}>Clear cart</button>
             </div>
 
-            {/* Summary */}
             <aside className="cart-summary">
               <h3>Summary</h3>
               <div className="summary-line">
@@ -107,12 +132,31 @@ export default function Cart() {
                 <strong>₹{total}</strong>
               </div>
 
-              {error && <p className="cart-error">{error}</p>}
-
               {isAuthed ? (
-                <button className="btn btn-primary cart-checkout-btn" onClick={handleCheckout} disabled={busy}>
-                  {busy ? 'Placing order…' : 'Place order'}
-                </button>
+                <form className="checkout-form" onSubmit={handleCheckout}>
+                  <label>
+                    Phone number
+                    <input
+                      type="tel"
+                      placeholder="e.g. 98765 43210"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Delivery address
+                    <textarea
+                      rows="3"
+                      placeholder="House no., street, area, city, PIN"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                    />
+                  </label>
+                  {error && <p className="cart-error">{error}</p>}
+                  <button type="submit" className="btn btn-primary cart-checkout-btn" disabled={busy}>
+                    {busy ? 'Placing order…' : 'Place order'}
+                  </button>
+                </form>
               ) : (
                 <div className="cart-login-note">
                   <p>Please log in to place your order.</p>

@@ -1,9 +1,21 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { products } from '../data/products.js'
+import { supabase } from '../lib/supabase.js'
+import ImageSlider from '../components/ImageSlider.jsx'
+import { homeSlides } from '../data/slides.js'
 import './Home.css'
 
 export default function Home() {
-  const featured = products.slice(0, 3)
+  const [featured, setFeatured] = useState([])
+
+  useEffect(() => {
+    supabase
+      .from('products')
+      .select('*')
+      .order('sort_order', { ascending: true })
+      .limit(3)
+      .then(({ data }) => { if (data) setFeatured(data) })
+  }, [])
 
   return (
     <div className="home">
@@ -49,18 +61,27 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== Featured products ===== */}
+      {/* ===== Featured + slider ===== */}
       <section className="featured shell">
         <div className="featured-head">
           <span className="eyebrow">From our hive</span>
+          <div className="home-slider">
+            <ImageSlider slides={homeSlides} />
+          </div>
           <h2>Featured honey</h2>
         </div>
+
         <div className="featured-grid">
           {featured.map((p) => (
             <article className="fcard" key={p.id}>
-              <div className="fcard-img" aria-hidden="true">⬡</div>
+              <div className="fcard-img" aria-hidden="true">🍯</div>
               <div className="fcard-body">
-                {p.tag && <span className="fcard-tag">{p.tag}</span>}
+                <div className="fcard-top">
+                  {p.tag && <span className="fcard-tag">{p.tag}</span>}
+                  <span className={`stock-badge ${p.in_stock ? 'is-available' : 'is-out'}`}>
+                    {p.in_stock ? 'Available' : 'Out of stock'}
+                  </span>
+                </div>
                 <h3>{p.name}</h3>
                 <p>{p.blurb}</p>
                 <div className="fcard-foot">
@@ -71,6 +92,7 @@ export default function Home() {
             </article>
           ))}
         </div>
+
         <div className="featured-more">
           <Link to="/shop" className="btn btn-ghost">See all products →</Link>
         </div>

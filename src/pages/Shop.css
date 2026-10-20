@@ -171,3 +171,14 @@
   .detail-photo { min-height: 200px; font-size: 88px; }
   .info-grid { grid-template-columns: 1fr; }
 }
+.honey-item-meta { display: inline-flex; align-items: center; gap: 10px; }
+.stock-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.stock-dot.is-available { background: var(--forest); }
+.stock-dot.is-out { background: #a32d2d; }
+.detail-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.detail-top .detail-tag { margin-bottom: 0; }

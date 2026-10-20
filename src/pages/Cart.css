@@ -157,3 +157,19 @@
   .cart-row-total { grid-column: 2; text-align: left; }
   .cart-row-remove { grid-column: 3; grid-row: 1; }
 }
+.checkout-form { display: flex; flex-direction: column; gap: 14px; margin-bottom: 4px; }
+.checkout-form label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: var(--charcoal-soft); }
+.checkout-form input,
+.checkout-form textarea {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--charcoal);
+  padding: 11px 13px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--white);
+}
+.checkout-form input:focus,
+.checkout-form textarea:focus { outline: none; border-color: var(--honey); box-shadow: 0 0 0 3px rgba(233, 163, 25, 0.18); }
+.checkout-form textarea { resize: vertical; }

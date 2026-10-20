@@ -119,3 +119,36 @@ main { flex: 1; }
   * { animation: none !important; transition: none !important; }
   html { scroll-behavior: auto; }
 }
+/* stock badges (used on the shop and home page) */
+.stock-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.stock-badge::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.stock-badge.is-available { background: #eaf3de; color: var(--forest-dark); }
+.stock-badge.is-out { background: #f8e1dc; color: #a32d2d; }
+
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.fcard-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.fcard-top .fcard-tag { margin-bottom: 0; }
