@@ -8,6 +8,7 @@ import About from './pages/About.jsx'
 import Login from './pages/Login.jsx'
 import Cart from './pages/Cart.jsx'
 import Admin from './pages/Admin.jsx'
+import ResetPassword from './pages/ResetPassword.jsx'
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </main>
       <Footer />

@@ -225,3 +225,9 @@
   .auth-brand { display: none; } /* form-first on phones */
   .auth-form-panel { padding: 48px 24px; }
 }
+.otp-input { letter-spacing: 0.5em; font-size: 20px !important; font-weight: 700; text-align: center; }
+.otp-actions { display: flex; justify-content: space-between; margin-top: 16px; font-size: 14px; }
+.auth-link-btn { background: none; border: none; color: var(--honey-dark); font-family: var(--font-body); font-weight: 700; cursor: pointer; padding: 0; font-size: 14px; }
+.auth-link-btn:disabled { color: var(--charcoal-soft); cursor: not-allowed; }
+.forgot-row { display: flex; justify-content: flex-end; margin-top: -6px; }
+.reset-box { grid-template-columns: 1fr; max-width: 460px; }
