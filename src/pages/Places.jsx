@@ -1,20 +1,18 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { places } from '../data/places.js'
 import PlaceCard from '../components/PlaceCard.jsx'
+import PlaceModal from '../components/PlaceModal.jsx'
 import './Places.css'
 
-// Build the filter list from the data: ['All', ...unique types]
-const categories = ['All', ...new Set(places.map((p) => p.type))]
-
 export default function Places() {
+  const categories = useMemo(() => ['All', ...new Set(places.map((p) => p.type))], [])
   const [active, setActive] = useState('All')
+  const [selected, setSelected] = useState(null)
 
-  const visible =
-    active === 'All' ? places : places.filter((p) => p.type === active)
+  const visible = active === 'All' ? places : places.filter((p) => p.type === active)
 
   return (
     <div className="places">
-      {/* ===== Page header ===== */}
       <header className="places-head">
         <div className="shell">
           <span className="eyebrow">Places to Visit</span>
@@ -27,7 +25,6 @@ export default function Places() {
         </div>
       </header>
 
-      {/* ===== Filter + grid ===== */}
       <section className="shell places-body">
         <div className="filter-bar" role="tablist" aria-label="Filter places by type">
           {categories.map((cat) => (
@@ -45,7 +42,7 @@ export default function Places() {
 
         <div className="places-grid">
           {visible.map((place) => (
-            <PlaceCard key={place.id} place={place} />
+            <PlaceCard key={place.id} place={place} onOpen={setSelected} />
           ))}
         </div>
 
@@ -53,6 +50,8 @@ export default function Places() {
           <p className="places-empty">No places in this category yet.</p>
         )}
       </section>
+
+      {selected && <PlaceModal place={selected} onClose={() => setSelected(null)} />}
     </div>
   )
 }
