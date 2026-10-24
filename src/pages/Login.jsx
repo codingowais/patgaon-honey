@@ -23,7 +23,7 @@ function AppleIcon() {
 }
 
 export default function Login() {
-  const { signIn, signUp, verifySignup, resendSignup, resetPassword, signInWithProvider } = useAuth()
+  const { signIn, signUp, verifySignup, resendSignup, resetPassword, signInWithProvider,signOut } = useAuth()
   const navigate = useNavigate()
 
   // view: 'login' | 'signup' | 'verify' | 'forgot' | 'forgot-sent'
@@ -82,14 +82,22 @@ export default function Login() {
     if (!form.name.trim()) return setError('Please enter your name.')
     if (!validEmail) return setError('Enter a valid email address.')
     if (form.password.length < 6) return setError('Password must be at least 6 characters.')
+
     setBusy(true)
+    // End any existing session first, so the old account can't stay logged in
+    await signOut()
     const { data, error } = await signUp({ email, password: form.password, name: form.name.trim() })
     setBusy(false)
     if (error) return setError(error.message)
-    // Supabase returns no identities when this email is already registered
     if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
       return setError('An account with this email already exists. Please log in instead.')
     }
+    // Confirmation is off, so the new user is logged in straight away
+    if (data.session) {
+      navigate('/')
+      return
+    }
+    // Only reached if confirmation is still on
     setPendingEmail(email)
     setView('verify')
     setCooldown(30)

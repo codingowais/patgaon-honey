@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase.js'
 import ImageSlider from '../components/ImageSlider.jsx'
 import { homeSlides } from '../data/slides.js'
+import { honeyImage } from '../data/honeyImages.js'
 import './Home.css'
 
 export default function Home() {
@@ -74,7 +75,13 @@ export default function Home() {
         <div className="featured-grid">
           {featured.map((p) => (
             <article className="fcard" key={p.id}>
-              <div className="fcard-img" aria-hidden="true">🍯</div>
+              <div className="fcard-img">
+  {honeyImage(p.id) ? (
+    <img src={honeyImage(p.id)} alt={p.name} />
+  ) : (
+    <span aria-hidden="true">🍯</span>
+  )}
+</div>
               <div className="fcard-body">
                 <div className="fcard-top">
                   {p.tag && <span className="fcard-tag">{p.tag}</span>}

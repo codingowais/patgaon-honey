@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase.js'
 import { useCart } from '../context/CartContext.jsx'
+import { honeyImage } from '../data/honeyImages.js'
 import './Shop.css'
 
 export default function Shop() {
@@ -106,6 +107,13 @@ export default function Shop() {
                     className={`honey-item ${p.id === activeId ? 'is-active' : ''}`}
                     onClick={() => select(p.id)}
                   >
+                    <span className="honey-thumb">
+                      {honeyImage(p.id) ? (
+                        <img src={honeyImage(p.id)} alt="" />
+                      ) : (
+                        <span aria-hidden="true">🍯</span>
+                      )}
+                    </span>
                     <span className="honey-item-name">{p.name}</span>
                     <span className="honey-item-meta">
                       <span className={`stock-dot ${available ? 'is-available' : 'is-out'}`} aria-label={available ? 'Available' : 'Out of stock'} />
@@ -118,8 +126,12 @@ export default function Shop() {
 
             {/* Right: detail panel */}
             <div className="honey-detail" key={active.id}>
-              <div className="detail-photo" aria-hidden="true">
-                <span>🍯</span>
+              <div className="detail-photo">
+                {honeyImage(active.id) ? (
+                  <img src={honeyImage(active.id)} alt={active.name} />
+                ) : (
+                  <span aria-hidden="true">🍯</span>
+                )}
               </div>
 
               <div className="detail-info">
