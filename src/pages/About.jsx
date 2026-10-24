@@ -42,6 +42,7 @@ export default function About() {
             Patgaon has turned honey into a way of life, and put a small village on
             India's tourism map.
           </p>
+           
         </header>
 
         {/* ===== Main frame ===== */}

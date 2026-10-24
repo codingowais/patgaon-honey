@@ -2,7 +2,10 @@
   background: var(--cream);
   padding: 56px 0 96px;
 }
-.about-wrap {
+.about .about-wrap {
+  max-width: 1320px;
+  width: 100%;
+  padding: 0 32px;
   display: flex;
   flex-direction: column;
   gap: 32px;
