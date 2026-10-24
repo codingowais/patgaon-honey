@@ -1,69 +1,105 @@
+.about {
+  background: var(--cream);
+  padding: 56px 0 96px;
+}
+.about-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ===== Header card ===== */
 .about-head {
-  background:
-    radial-gradient(circle at 88% 15%, rgba(233, 163, 25, 0.14), transparent 45%),
-    var(--cream);
-  padding: 72px 0 56px;
-  border-bottom: 1px solid var(--border);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 72px 64px;
 }
 .about-head h1 {
-  font-size: clamp(2.2rem, 5vw, 3.4rem);
-  margin: 16px 0 18px;
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+  margin: 18px 0 20px;
 }
 .about-head p {
   max-width: 640px;
   color: var(--charcoal-soft);
-  font-size: 1.08rem;
+  font-size: 1.05rem;
+  line-height: 1.85;
 }
 
-.about-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  margin-top: 56px;
-}
-.stat {
+/* ===== Main frame ===== */
+.about-frame {
   background: var(--white);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 30px 24px;
+  border-radius: 28px;
+  padding: 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 88px;
+}
+
+/* five equal square cards */
+.about-cards {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+.about-card {
+  aspect-ratio: 1 / 1;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px;
   text-align: center;
 }
-.stat-value {
-  display: block;
+.about-card-value {
   font-family: var(--font-display);
+  font-size: 1.9rem;
   font-weight: 600;
-  font-size: 2.1rem;
   color: var(--honey-dark);
   line-height: 1;
 }
-.stat-label {
-  display: block;
-  margin-top: 10px;
-  font-size: 0.88rem;
+.about-card-label {
+  font-size: 0.85rem;
   color: var(--charcoal-soft);
+  line-height: 1.4;
 }
 
+/* story: two blocks side by side */
 .about-story {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 56px;
-  margin-top: 96px;
+  gap: 72px;
 }
-.story-block h2 { font-size: 1.7rem; margin-bottom: 18px; }
-.story-block p { color: var(--charcoal-soft); font-size: 1rem; line-height: 1.75; }
+.about-story h2 {
+  font-size: 1.6rem;
+  margin-bottom: 18px;
+}
+.about-story p {
+  color: var(--charcoal-soft);
+  line-height: 1.85;
+}
 
+/* contact: info and form side by side */
 .about-contact {
   display: grid;
-  grid-template-columns: 1fr 1.1fr;
-  gap: 56px;
-  margin-top: 96px;
-  padding: 56px;
-  background: var(--cream-deep);
-  border-radius: 24px;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 72px;
+  align-items: start;
 }
-.contact-info h2 { font-size: 1.9rem; margin: 14px 0 16px; }
-.contact-info > p { color: var(--charcoal-soft); margin-bottom: 30px; line-height: 1.7; }
-
+.contact-info h2 {
+  font-size: 1.9rem;
+  margin: 14px 0 16px;
+}
+.contact-info > p {
+  color: var(--charcoal-soft);
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
 .contact-list { list-style: none; }
 .contact-list li {
   display: flex;
@@ -72,42 +108,50 @@
   border-top: 1px solid var(--border);
   font-size: 0.98rem;
 }
+.contact-list li:last-child { border-bottom: 1px solid var(--border); }
 .contact-list strong {
-  font-family: var(--font-body);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--amber);
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
 
-.contact-form { display: flex; flex-direction: column; gap: 20px; }
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 .contact-form label {
   display: flex;
   flex-direction: column;
-  font-weight: 500;
-  font-size: 14px;
   gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--charcoal-soft);
 }
 .contact-form input,
 .contact-form textarea {
   font-family: var(--font-body);
   font-size: 15px;
+  font-weight: 400;
+  color: var(--charcoal);
   padding: 13px 15px;
   border: 1px solid var(--border);
-  border-radius: 10px;
-  background: var(--white);
-  color: var(--charcoal);
-  resize: vertical;
+  border-radius: 12px;
+  background: var(--cream);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 .contact-form input:focus,
 .contact-form textarea:focus {
   outline: none;
+  background: var(--white);
   border-color: var(--honey);
   box-shadow: 0 0 0 3px rgba(233, 163, 25, 0.18);
 }
-.contact-form .btn { align-self: flex-start; margin-top: 4px; }
+.contact-form textarea { resize: vertical; min-height: 130px; }
+.contact-form .btn { align-self: flex-start; }
 
 .form-error {
   color: #a32d2d;
@@ -116,35 +160,40 @@
 }
 
 .contact-success {
-  background: var(--white);
+  background: var(--cream);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 48px 32px;
+  border-radius: 16px;
+  padding: 48px 28px;
   text-align: center;
 }
 .success-mark {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   background: #eaf3de;
   color: var(--forest-dark);
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 700;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
-.contact-success h3 { font-size: 1.5rem; margin-bottom: 10px; }
+.contact-success h3 { font-size: 1.4rem; margin-bottom: 8px; }
 .contact-success p { color: var(--charcoal-soft); margin-bottom: 22px; }
 
+/* ===== Responsive ===== */
+@media (max-width: 1000px) {
+  .about-cards { grid-template-columns: repeat(3, 1fr); }
+}
 @media (max-width: 860px) {
-  .about-stats { grid-template-columns: repeat(2, 1fr); }
-  .about-story { grid-template-columns: 1fr; gap: 40px; margin-top: 64px; }
-  .about-contact {
-    grid-template-columns: 1fr;
-    gap: 36px;
-    margin-top: 64px;
-    padding: 36px 26px;
-  }
+  .about-head { padding: 48px 28px; }
+  .about-frame { padding: 36px 24px; gap: 64px; }
+  .about-story { grid-template-columns: 1fr; gap: 40px; }
+  .about-contact { grid-template-columns: 1fr; gap: 48px; }
+}
+@media (max-width: 520px) {
+  .about-cards { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .about-card-value { font-size: 1.5rem; }
+  .about-card:last-child:nth-child(odd) { grid-column: 1 / -1; aspect-ratio: auto; padding: 28px 16px; }
 }
