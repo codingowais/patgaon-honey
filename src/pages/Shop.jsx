@@ -107,13 +107,7 @@ export default function Shop() {
                     className={`honey-item ${p.id === activeId ? 'is-active' : ''}`}
                     onClick={() => select(p.id)}
                   >
-                    <span className="honey-thumb">
-                      {honeyImage(p.id) ? (
-                        <img src={honeyImage(p.id)} alt="" />
-                      ) : (
-                        <span aria-hidden="true">🍯</span>
-                      )}
-                    </span>
+               
                     <span className="honey-item-name">{p.name}</span>
                     <span className="honey-item-meta">
                       <span className={`stock-dot ${available ? 'is-available' : 'is-out'}`} aria-label={available ? 'Available' : 'Out of stock'} />

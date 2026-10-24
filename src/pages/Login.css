@@ -231,3 +231,44 @@
 .auth-link-btn:disabled { color: var(--charcoal-soft); cursor: not-allowed; }
 .forgot-row { display: flex; justify-content: flex-end; margin-top: -6px; }
 .reset-box { grid-template-columns: 1fr; max-width: 460px; }
+/* ===== Mobile: form only, no left panel ===== */
+@media (max-width: 760px) {
+  .auth {
+    padding: 0;
+    min-height: 100vh;
+    align-items: stretch;
+    background: var(--cream);
+  }
+  .auth-box {
+    display: block;
+    grid-template-columns: 1fr;
+    max-width: 100%;
+    width: 100%;
+    min-height: 100vh;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background: var(--cream);
+  }
+  .auth-brand {
+    display: none;
+  }
+  .auth-form-panel {
+    display: block;
+    min-height: 100vh;
+    padding: 40px 22px 32px;
+    background: var(--cream);
+    border-left: none;
+    border-top: none;
+  }
+  .auth-form-inner {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  .auth-form-inner h1 {
+    font-size: 1.75rem;
+  }
+  .method-tabs {
+    margin-bottom: 22px;
+  }
+}
