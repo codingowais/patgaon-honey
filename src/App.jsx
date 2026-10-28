@@ -9,6 +9,7 @@ import Login from './pages/Login.jsx'
 import Cart from './pages/Cart.jsx'
 import Admin from './pages/Admin.jsx'
 import ResetPassword from './pages/ResetPassword.jsx'
+import Orders from './pages/Orders.jsx'
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/orders" element={<Orders />} />
         </Routes>
       </main>
       <Footer />

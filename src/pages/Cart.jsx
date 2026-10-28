@@ -18,7 +18,7 @@ const STATES = [
 ]
 
 const EMPTY_ADDRESS = {
-  street: '', area: '', landmark: '', city: '', district: '', state: 'Maharashtra', pincode: '',
+  street: '', area: '', landmark: '', village: '', state: 'Maharashtra', pincode: '',
 }
 
 export default function Cart() {
@@ -42,8 +42,7 @@ export default function Cart() {
     if (digits.length !== 10) return 'Enter a valid 10-digit phone number.'
     if (!addr.street.trim()) return 'Enter your house or flat number and street.'
     if (!addr.area.trim()) return 'Enter your area or locality.'
-    if (!addr.city.trim()) return 'Enter your city or village.'
-    if (!addr.district.trim()) return 'Enter your district.'
+    if (!addr.village.trim()) return 'Enter your village or town.'
     if (!addr.state) return 'Select your state.'
     if (!/^\d{6}$/.test(addr.pincode.trim())) return 'Enter a valid 6-digit PIN code.'
     return ''
@@ -55,8 +54,7 @@ export default function Cart() {
       addr.street.trim(),
       addr.area.trim(),
       addr.landmark.trim() && `Near ${addr.landmark.trim()}`,
-      addr.city.trim(),
-      addr.district.trim(),
+      addr.village.trim(),
       addr.state,
       `PIN ${addr.pincode.trim()}`,
     ].filter(Boolean).join(', ')
@@ -78,8 +76,8 @@ export default function Cart() {
         customer_email: user.email,
         phone: phone.replace(/\D/g, ''),
         address,
-        city: addr.city.trim(),
-        district: addr.district.trim(),
+        city: addr.village.trim(),
+        district: addr.state,
         state: addr.state,
         pincode: addr.pincode.trim(),
       })
@@ -137,10 +135,11 @@ export default function Cart() {
       <section className="shell cart-body">
         {items.length === 0 ? (
           <div className="cart-empty-state">
-            <span aria-hidden="true">🛒</span>
-            <p>Your cart is empty.</p>
-            <Link to="/shop" className="btn btn-primary">Browse the honey</Link>
-          </div>
+  <span className="empty-icon" aria-hidden="true">🛒</span>
+  <h2>Your cart is empty</h2>
+  <p>Pick a honey from the shop and it will appear here.</p>
+  <Link to="/shop" className="btn btn-primary">Browse the honey</Link>
+</div>
         ) : (
           <div className="cart-layout">
             <div className="cart-items">
@@ -210,13 +209,8 @@ export default function Cart() {
                   </label>
 
                   <label>
-                    City / village
-                    <input type="text" placeholder="e.g. Patgaon" value={addr.city} onChange={setField('city')} />
-                  </label>
-
-                  <label>
-                    District
-                    <input type="text" placeholder="e.g. Kolhapur" value={addr.district} onChange={setField('district')} />
+                    Village / town
+                    <input type="text" placeholder="e.g. Patgaon" value={addr.village} onChange={setField('village')} />
                   </label>
 
                   <label>

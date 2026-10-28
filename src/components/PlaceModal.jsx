@@ -6,8 +6,9 @@ export default function PlaceModal({ place, onClose }) {
   const count = photos.length
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
+  const hasInfo = Boolean(place.bestTime || place.visitTime || place.hours)
+  const tips = place.tips || []
 
-  // Esc closes; left and right arrow keys change the photo
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'Escape') onClose()
@@ -22,7 +23,6 @@ export default function PlaceModal({ place, onClose }) {
     }
   }, [count, onClose])
 
-  // Slow automatic slideshow, paused while the mouse is over the photo
   useEffect(() => {
     if (paused || count < 2) return
     const id = setInterval(() => setIndex((i) => (i + 1) % count), 5000)
@@ -68,6 +68,38 @@ export default function PlaceModal({ place, onClose }) {
           <p className="pm-distance">📍 {place.distance}</p>
           <p className="pm-blurb">{place.blurb}</p>
         </div>
+
+        {hasInfo && (
+          <div className="pm-facts">
+            {place.bestTime && (
+              <div>
+                <span>Best time</span>
+                <strong>{place.bestTime}</strong>
+              </div>
+            )}
+            {place.visitTime && (
+              <div>
+                <span>Time needed</span>
+                <strong>{place.visitTime}</strong>
+              </div>
+            )}
+            {place.hours && (
+              <div>
+                <span>Open</span>
+                <strong>{place.hours}</strong>
+              </div>
+            )}
+          </div>
+        )}
+
+        {tips.length > 0 && (
+          <div className="pm-tips">
+            <h3>Visitor tips</h3>
+            <ul>
+              {tips.map((t, i) => <li key={i}>{t}</li>)}
+            </ul>
+          </div>
+        )}
 
         {count > 1 && (
           <div className="pm-thumbs">

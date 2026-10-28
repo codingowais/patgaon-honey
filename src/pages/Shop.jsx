@@ -139,6 +139,14 @@ export default function Shop() {
                 <div className="detail-meta">
                   <span className="detail-price">₹{active.price}</span>
                   <span className="detail-weight">{active.weight}</span>
+                  <span className="detail-weight">{active.weight}</span>
+</div>
+<div className="trust-row">
+  <span>Raw, unheated</span>
+  <span>Direct from farmers</span>
+  <span>No additives</span>
+</div>
+<div className="detail-meta detail-meta-spacer">
                 </div>
                 <p className="detail-text">{active.details}</p>
 

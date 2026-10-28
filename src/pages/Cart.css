@@ -191,3 +191,10 @@
   color: var(--charcoal);
 }
 .optional { font-weight: 400; color: var(--charcoal-soft); }
+.cart-empty-state h2 {
+  font-size: 1.6rem;
+  margin: 6px 0 8px;
+  color: var(--charcoal);
+}
+.cart-empty-state p { margin-bottom: 22px; }
+.empty-icon { font-size: 52px; display: block; margin-bottom: 8px; }

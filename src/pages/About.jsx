@@ -90,8 +90,8 @@ export default function About() {
               </p>
               <ul className="contact-list">
                 <li><strong>Address</strong>Patgaon, Bhudargad Taluka, Kolhapur District, Maharashtra</li>
-                <li><strong>Email</strong>hello@patgaonhoney.in</li>
-                <li><strong>Phone</strong>+91 00000 00000</li>
+                <li><strong>Email</strong>Patgaon.legal@gmail.com</li>
+                <li><strong>Phone</strong>+91 9372491265</li>
               </ul>
             </div>
 

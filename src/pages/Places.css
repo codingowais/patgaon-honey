@@ -66,3 +66,27 @@
 @media (max-width: 600px) {
   .places-grid { grid-template-columns: 1fr; }
 }
+.places-tools {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+.places-search,
+.places-sort {
+  font-family: var(--font-body);
+  font-size: 15px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--charcoal);
+}
+.places-search { flex: 1 1 260px; }
+.places-sort { min-width: 180px; cursor: pointer; }
+.places-search:focus,
+.places-sort:focus {
+  outline: none;
+  border-color: var(--honey);
+  box-shadow: 0 0 0 3px rgba(233, 163, 25, 0.18);
+}

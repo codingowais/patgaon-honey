@@ -266,3 +266,18 @@
   display: block;
 }
 .honey-item-name { flex: 1; }
+.trust-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: -6px 0 18px;
+}
+.trust-row span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--forest-dark);
+  background: #eaf3de;
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+.detail-meta-spacer { display: none; }
