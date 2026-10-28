@@ -173,3 +173,21 @@
 .checkout-form input:focus,
 .checkout-form textarea:focus { outline: none; border-color: var(--honey); box-shadow: 0 0 0 3px rgba(233, 163, 25, 0.18); }
 .checkout-form textarea { resize: vertical; }
+.checkout-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: -4px;
+}
+.checkout-form select {
+  font-family: var(--font-body);
+  font-size: 15px;
+  padding: 11px 13px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--white);
+  color: var(--charcoal);
+}
+.optional { font-weight: 400; color: var(--charcoal-soft); }

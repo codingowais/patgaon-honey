@@ -76,12 +76,12 @@ export default function Home() {
           {featured.map((p) => (
             <article className="fcard" key={p.id}>
               <div className="fcard-img">
-  {honeyImage(p.id) ? (
-    <img src={honeyImage(p.id)} alt={p.name} />
-  ) : (
-    <span aria-hidden="true">🍯</span>
-  )}
-</div>
+                {honeyImage(p.id) ? (
+                  <img src={honeyImage(p.id)} alt={p.name} />
+                ) : (
+                  <span aria-hidden="true">🍯</span>
+                )}
+              </div>
               <div className="fcard-body">
                 <div className="fcard-top">
                   {p.tag && <span className="fcard-tag">{p.tag}</span>}

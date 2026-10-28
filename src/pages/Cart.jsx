@@ -4,7 +4,22 @@ import { useCart } from '../context/CartContext.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 import { supabase } from '../lib/supabase.js'
 import { sendOrderEmails } from '../lib/notify.js'
+import { honeyImage } from '../data/honeyImages.js'
 import './Cart.css'
+
+const STATES = [
+  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat',
+  'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh',
+  'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab',
+  'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh',
+  'Uttarakhand', 'West Bengal', 'Andaman and Nicobar Islands', 'Chandigarh',
+  'Dadra and Nagar Haveli and Daman and Diu', 'Delhi', 'Jammu and Kashmir', 'Ladakh',
+  'Lakshadweep', 'Puducherry',
+]
+
+const EMPTY_ADDRESS = {
+  street: '', area: '', landmark: '', city: '', district: '', state: 'Maharashtra', pincode: '',
+}
 
 export default function Cart() {
   const { items, total, updateQty, removeItem, clear } = useCart()
@@ -12,19 +27,48 @@ export default function Cart() {
   const navigate = useNavigate()
 
   const [phone, setPhone] = useState('')
-  const [address, setAddress] = useState('')
+  const [addr, setAddr] = useState(EMPTY_ADDRESS)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [order, setOrder] = useState(null)
 
+  const setField = (field) => (e) => {
+    setAddr({ ...addr, [field]: e.target.value })
+    setError('')
+  }
+
+  const validate = () => {
+    const digits = phone.replace(/\D/g, '')
+    if (digits.length !== 10) return 'Enter a valid 10-digit phone number.'
+    if (!addr.street.trim()) return 'Enter your house or flat number and street.'
+    if (!addr.area.trim()) return 'Enter your area or locality.'
+    if (!addr.city.trim()) return 'Enter your city or village.'
+    if (!addr.district.trim()) return 'Enter your district.'
+    if (!addr.state) return 'Select your state.'
+    if (!/^\d{6}$/.test(addr.pincode.trim())) return 'Enter a valid 6-digit PIN code.'
+    return ''
+  }
+
+  // One readable line, used in the confirmation email and the admin view
+  const fullAddress = () =>
+    [
+      addr.street.trim(),
+      addr.area.trim(),
+      addr.landmark.trim() && `Near ${addr.landmark.trim()}`,
+      addr.city.trim(),
+      addr.district.trim(),
+      addr.state,
+      `PIN ${addr.pincode.trim()}`,
+    ].filter(Boolean).join(', ')
+
   const handleCheckout = async (e) => {
     e.preventDefault()
     setError('')
-    if (!phone.trim() || !address.trim()) {
-      setError('Please enter your phone number and delivery address.')
-      return
-    }
+    const problem = validate()
+    if (problem) return setError(problem)
+
     setBusy(true)
+    const address = fullAddress()
     const { data, error } = await supabase
       .from('orders')
       .insert({
@@ -32,25 +76,27 @@ export default function Cart() {
         items,
         total,
         customer_email: user.email,
-        phone: phone.trim(),
-        address: address.trim(),
+        phone: phone.replace(/\D/g, ''),
+        address,
+        city: addr.city.trim(),
+        district: addr.district.trim(),
+        state: addr.state,
+        pincode: addr.pincode.trim(),
       })
       .select()
       .single()
 
     if (error) {
       setBusy(false)
-      setError(error.message)
-      return
+      return setError(error.message)
     }
 
-    // Emails are sent after the order is saved. A failed email won't cancel the order.
     await sendOrderEmails({
       order: data,
       customerName: displayName,
       customerEmail: user.email,
-      phone: phone.trim(),
-      address: address.trim(),
+      phone: phone.replace(/\D/g, ''),
+      address,
     })
 
     setBusy(false)
@@ -58,7 +104,7 @@ export default function Cart() {
     clear()
   }
 
-  // ===== Confirmation screen =====
+  // ===== Confirmation =====
   if (order) {
     return (
       <div className="cart-page">
@@ -100,7 +146,13 @@ export default function Cart() {
             <div className="cart-items">
               {items.map((i) => (
                 <div className="cart-row" key={i.id}>
-                  <div className="cart-row-photo" aria-hidden="true">🍯</div>
+                  <div className="cart-row-photo">
+                    {honeyImage(i.id) ? (
+                      <img src={honeyImage(i.id)} alt={i.name} />
+                    ) : (
+                      <span aria-hidden="true">🍯</span>
+                    )}
+                  </div>
                   <div className="cart-row-info">
                     <span className="cart-row-name">{i.name}</span>
                     <span className="cart-row-sub">{i.weight} · ₹{i.price}</span>
@@ -133,26 +185,55 @@ export default function Cart() {
               </div>
 
               {isAuthed ? (
-                <form className="checkout-form" onSubmit={handleCheckout}>
+                <form className="checkout-form" onSubmit={handleCheckout} noValidate>
+                  <p className="checkout-title">Delivery details</p>
+
                   <label>
                     Phone number
-                    <input
-                      type="tel"
-                      placeholder="e.g. 98765 43210"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                    />
+                    <input type="tel" inputMode="numeric" placeholder="98765 43210" value={phone}
+                      onChange={(e) => { setPhone(e.target.value); setError('') }} />
                   </label>
+
                   <label>
-                    Delivery address
-                    <textarea
-                      rows="3"
-                      placeholder="House no., street, area, city, PIN"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                    />
+                    House / flat no. and street
+                    <input type="text" placeholder="e.g. Flat 4, Shivaji Road" value={addr.street} onChange={setField('street')} />
                   </label>
+
+                  <label>
+                    Area / locality
+                    <input type="text" placeholder="e.g. Near bus stand" value={addr.area} onChange={setField('area')} />
+                  </label>
+
+                  <label>
+                    Landmark <span className="optional">(optional)</span>
+                    <input type="text" placeholder="e.g. Opposite temple" value={addr.landmark} onChange={setField('landmark')} />
+                  </label>
+
+                  <label>
+                    City / village
+                    <input type="text" placeholder="e.g. Patgaon" value={addr.city} onChange={setField('city')} />
+                  </label>
+
+                  <label>
+                    District
+                    <input type="text" placeholder="e.g. Kolhapur" value={addr.district} onChange={setField('district')} />
+                  </label>
+
+                  <label>
+                    State
+                    <select value={addr.state} onChange={setField('state')}>
+                      {STATES.map((s) => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                  </label>
+
+                  <label>
+                    PIN code
+                    <input type="text" inputMode="numeric" maxLength={6} placeholder="6 digits" value={addr.pincode}
+                      onChange={(e) => setField('pincode')({ target: { value: e.target.value.replace(/\D/g, '') } })} />
+                  </label>
+
                   {error && <p className="cart-error">{error}</p>}
+
                   <button type="submit" className="btn btn-primary cart-checkout-btn" disabled={busy}>
                     {busy ? 'Placing order…' : 'Place order'}
                   </button>
