@@ -3,27 +3,8 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 import './Login.css'
 
-function GoogleIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
-      <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.4 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6.1C12.3 13.3 17.6 9.5 24 9.5z"/>
-      <path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.5 3-2.2 5.5-4.7 7.2l7.3 5.7c4.3-4 6.8-9.9 6.8-17.4z"/>
-      <path fill="#FBBC05" d="M10.4 28.3c-.5-1.5-.8-3.1-.8-4.8s.3-3.3.8-4.8l-7.8-6.1C1 15.9 0 19.8 0 24s1 8.1 2.6 11.4l7.8-6.1z"/>
-      <path fill="#34A853" d="M24 48c6.2 0 11.5-2 15.3-5.5l-7.3-5.7c-2 1.4-4.7 2.3-8 2.3-6.4 0-11.7-3.8-13.6-9.3l-7.8 6.1C6.5 42.6 14.6 48 24 48z"/>
-    </svg>
-  )
-}
-
-function AppleIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M16.4 12.9c0-2.6 2.1-3.8 2.2-3.9-1.2-1.7-3-2-3.7-2-1.6-.2-3 .9-3.8.9-.8 0-2-.9-3.2-.9-1.7 0-3.2 1-4.1 2.5-1.7 3-.4 7.5 1.2 9.9.8 1.2 1.8 2.5 3.1 2.5 1.2 0 1.7-.8 3.2-.8s1.9.8 3.2.8c1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.6-1-2.6-3.9zM14.3 4.8c.7-.8 1.1-2 1-3.1-1 0-2.2.6-2.9 1.5-.6.7-1.2 1.9-1 3 1.1.1 2.2-.6 2.9-1.4z"/>
-    </svg>
-  )
-}
-
 export default function Login() {
-  const { signIn, signUp, verifySignup, resendSignup, resetPassword, signInWithProvider,signOut } = useAuth()
+  const { signIn, signUp, verifySignup, resendSignup, resetPassword } = useAuth()
   const navigate = useNavigate()
 
   // view: 'login' | 'signup' | 'verify' | 'forgot' | 'forgot-sent'
@@ -63,7 +44,6 @@ export default function Login() {
     const { error } = await signIn({ email, password: form.password })
     setBusy(false)
     if (error) {
-      // Account exists but was never verified: send them to the code step
       if (/not confirmed/i.test(error.message)) {
         setPendingEmail(email)
         setView('verify')
@@ -82,22 +62,17 @@ export default function Login() {
     if (!form.name.trim()) return setError('Please enter your name.')
     if (!validEmail) return setError('Enter a valid email address.')
     if (form.password.length < 6) return setError('Password must be at least 6 characters.')
-
     setBusy(true)
-    // End any existing session first, so the old account can't stay logged in
-    await signOut()
     const { data, error } = await signUp({ email, password: form.password, name: form.name.trim() })
     setBusy(false)
     if (error) return setError(error.message)
     if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
       return setError('An account with this email already exists. Please log in instead.')
     }
-    // Confirmation is off, so the new user is logged in straight away
     if (data.session) {
       navigate('/')
       return
     }
-    // Only reached if confirmation is still on
     setPendingEmail(email)
     setView('verify')
     setCooldown(30)
@@ -138,12 +113,6 @@ export default function Login() {
     if (error) return setError(error.message)
     setPendingEmail(email)
     setView('forgot-sent')
-  }
-
-  const handleSocial = async (provider) => {
-    clear()
-    const { error } = await signInWithProvider(provider)
-    if (error) setError(error.message)
   }
 
   const titles = {
@@ -284,17 +253,6 @@ export default function Login() {
                 <p className="auth-toggle">
                   <button type="button" onClick={() => switchView('login')}>Back to log in</button>
                 </p>
-              </>
-            )}
-
-            {/* ===== Social (login and sign-up only) ===== */}
-            {(view === 'login' || view === 'signup') && (
-              <>
-                <div className="divider"><span>or</span></div>
-                <div className="social-buttons">
-                  <button type="button" className="social-btn" onClick={() => handleSocial('google')}><GoogleIcon /> Continue with Google</button>
-                  <button type="button" className="social-btn social-apple" onClick={() => handleSocial('apple')}><AppleIcon /> Continue with Apple</button>
-                </div>
               </>
             )}
 
